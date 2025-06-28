@@ -1,107 +1,101 @@
-{{-- @extends('layouts.app')
+@extends('layouts.app')
+
+@section('title', 'Modifier le Rôle - ANADEC RH')
+@section('page-title', 'Modifier le Rôle : ' . $role->display_name)
+@section('page-description', 'Modification des informations et permissions du rôle')
 
 @section('content')
-<div class="max-w-5xl mx-auto py-10 px-6">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Modifier le rôle : {{ $role->display_name }}</h2>
-
-    @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-            {{ session('success') }}
-        </div>
-    @endif
-
+<div class="space-y-6">
+    <!-- Formulaire de modification -->
     <form method="POST" action="{{ route('roles.update', $role) }}">
         @csrf
         @method('PUT')
 
-        <div class="mb-4">
-            <label class="block font-medium text-gray-700">Nom du rôle</label>
-            <input type="text" name="display_name" value="{{ old('display_name', $role->display_name) }}"
-                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-indigo-200" required>
-        </div>
-
-        <div class="mb-4">
-            <label class="block font-medium text-gray-700">Description</label>
-            <textarea name="description"
-                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-indigo-200"
-                rows="3">{{ old('description', $role->description) }}</textarea>
-        </div>
-
-        <div class="mb-6">
-            <label class="inline-flex items-center">
-                <input type="checkbox" name="is_active" class="form-checkbox" {{ $role->is_active ? 'checked' : '' }}>
-                <span class="ml-2 text-gray-700">Rôle actif</span>
-            </label>
-        </div>
-
-        <div class="mb-8">
-            <h3 class="text-lg font-semibold mb-4 text-gray-800">Permissions disponibles</h3>
-
-            @foreach ($groupedPermissions as $category => $permissions)
-                <div class="mb-6">
-                    <h4 class="text-md font-semibold text-indigo-700 mb-2 capitalize">{{ str_replace('-', ' ', $category) }}</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                        @foreach ($permissions as $key => $label)
-                            <label class="inline-flex items-center space-x-2">
-                                <input type="checkbox" name="permissions[]" value="{{ $key }}"
-                                    class="form-checkbox text-indigo-600"
-                                    {{ in_array($key, $role->permissions ?? []) ? 'checked' : '' }}>
-                                <span class="text-gray-700">{{ $label }}</span>
-                            </label>
-                        @endforeach
+        <div class="bg-white shadow-lg rounded-xl border border-gray-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-indigo-50 to-purple-50">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                        <i class="bx bx-edit mr-2 text-indigo-600"></i>
+                        Informations du Rôle
+                    </h3>
+                    <div class="flex items-center space-x-3">
+                        <a href="{{ route('roles.show', $role) }}" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                            <i class="bx bx-arrow-back mr-2"></i>Retour
+                        </a>
+                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="bx bx-save mr-2"></i>Sauvegarder
+                        </button>
                     </div>
                 </div>
-            @endforeach
+            </div>
+
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nom d'affichage *</label>
+                        <input type="text" name="display_name" value="{{ old('display_name', $role->display_name) }}" 
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                               required>
+                        @error('display_name')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Statut</label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="is_active" value="1" 
+                                   class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500"
+                                   {{ old('is_active', $role->is_active) ? 'checked' : '' }}>
+                            <span class="ml-2 text-gray-700">Rôle actif</span>
+                        </label>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea name="description" rows="3" 
+                                  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{{ old('description', $role->description) }}</textarea>
+                        @error('description')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="flex justify-end space-x-3">
-            <a href="{{ route('roles.index') }}"
-                class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition">
-                Annuler
-            </a>
-            <button type="submit"
-                class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
-                Enregistrer les modifications
-            </button>
-        </div>
-    </form>
-</div>
-@endsection --}}
-
-@section('content')
-<div class="container mx-auto py-6">
-    <div class="bg-white shadow rounded p-6">
-        <h1 class="text-2xl font-bold mb-4">Modifier le Rôle : {{ $role->display_name }}</h1>
-
-        <form action="{{ route('roles.update', $role) }}" method="POST">
-            @csrf
-            @method('PUT')
-
-            <div class="mb-4">
-                <label class="block font-semibold mb-1">Nom affiché</label>
-                <input type="text" name="display_name" class="w-full border rounded p-2" value="{{ old('display_name', $role->display_name) }}">
+        <!-- Permissions -->
+        <div class="bg-white shadow-lg rounded-xl border border-gray-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50">
+                <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                    <i class="bx bx-shield mr-2 text-green-600"></i>
+                    Permissions du Rôle
+                </h3>
             </div>
 
-            <div class="mb-4">
-                <label class="block font-semibold mb-1">Description</label>
-                <textarea name="description" rows="3" class="w-full border rounded p-2">{{ old('description', $role->description) }}</textarea>
-            </div>
-
-            <div class="mb-4">
-                <label class="block font-semibold mb-2">Activer le rôle</label>
-                <input type="checkbox" name="is_active" value="1" {{ $role->is_active ? 'checked' : '' }}>
-            </div>
-
-            <div class="mb-6">
-                <h2 class="font-bold text-lg mb-2">Permissions disponibles</h2>
+            <div class="p-6">
                 @foreach($groupedPermissions as $category => $permissions)
-                    <div class="mb-4">
-                        <h3 class="text-md font-semibold mb-1 uppercase">{{ ucfirst($category) }}</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                            @foreach($permissions as $key => $label)
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" name="permissions[]" value="{{ $key }}" {{ in_array($key, $role->permissions ?? []) ? 'checked' : '' }} class="mr-2">
-                                    {{ $label }}
+                    <div class="mb-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold text-gray-800 capitalize border-b border-gray-200 pb-2">
+                                <i class="bx bx-folder mr-2 text-gray-600"></i>
+                                {{ str_replace('-', ' ', $category) }}
+                            </h4>
+                            <button type="button" onclick="toggleCategoryPermissions('{{ $category }}')" 
+                                    class="text-sm text-blue-600 hover:text-blue-800">
+                                Tout sélectionner/désélectionner
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-category="{{ $category }}">
+                            @foreach($permissions as $permission => $description)
+                                <label class="inline-flex items-start space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <input type="checkbox" name="permissions[]" value="{{ $permission }}" 
+                                           class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500 mt-0.5"
+                                           {{ in_array($permission, $role->permissions ?? []) ? 'checked' : '' }}>
+                                    <div class="flex-1">
+                                        <div class="text-sm font-medium text-gray-900">{{ $description }}</div>
+                                        <div class="text-xs text-gray-500">{{ $permission }}</div>
+                                    </div>
                                 </label>
                             @endforeach
                         </div>
@@ -109,8 +103,48 @@
                 @endforeach
             </div>
 
-            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">Mettre à jour</button>
-        </form>
-    </div>
+            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-between items-center">
+                <div class="flex space-x-4">
+                    <button type="button" onclick="selectAllPermissions()" 
+                            class="text-sm text-green-600 hover:text-green-800">
+                        <i class="bx bx-check-square mr-1"></i>Tout sélectionner
+                    </button>
+                    <button type="button" onclick="deselectAllPermissions()" 
+                            class="text-sm text-red-600 hover:text-red-800">
+                        <i class="bx bx-square mr-1"></i>Tout désélectionner
+                    </button>
+                </div>
+                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    <i class="bx bx-save mr-2"></i>Sauvegarder les Modifications
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
+
+<script>
+function selectAllPermissions() {
+    document.querySelectorAll('input[name="permissions[]"]').forEach(checkbox => {
+        checkbox.checked = true;
+    });
+}
+
+function deselectAllPermissions() {
+    document.querySelectorAll('input[name="permissions[]"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+
+function toggleCategoryPermissions(category) {
+    const categorySection = document.querySelector(`[data-category="${category}"]`);
+    if (categorySection) {
+        const checkboxes = categorySection.querySelectorAll('input[name="permissions[]"]');
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = !allChecked;
+        });
+    }
+}
+</script>
 @endsection

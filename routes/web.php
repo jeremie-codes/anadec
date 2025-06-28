@@ -137,19 +137,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/{role}/edit', [RoleController::class, 'edit'])->name('edit');
         Route::put('/{role}', [RoleController::class, 'update'])->name('update');
 
-        // Gestion des utilisateurs
-        Route::get('/users/list', [RoleController::class, 'users'])->name('users');
-        Route::put('/users/{user}/role', [RoleController::class, 'updateUserRole'])->name('update-user-role');
+        // Gestion des agents et rôles
+        Route::put('/agents/{agent}/role', [RoleController::class, 'updateAgentRole'])->name('update-agent-role');
+        Route::post('/agents/{agent}/create-user-account', [RoleController::class, 'createUserAccount'])->name('create-user-account');
+        Route::delete('/agents/{agent}/delete-user-account', [RoleController::class, 'deleteUserAccount'])->name('delete-user-account');
+        Route::post('/agents/{agent}/reset-password', [RoleController::class, 'resetPassword'])->name('reset-password');
+
+        // Agents par rôle
+        Route::get('/{role}/agents', [RoleController::class, 'agentsByRole'])->name('agents-by-role');
 
         // Matrice des permissions
         Route::get('/permissions/matrix', [RoleController::class, 'permissions'])->name('permissions');
         Route::post('/permissions/update', [RoleController::class, 'updatePermissions'])->name('update-permissions');
-
-        // Permissions par utilisateur
-        Route::get('/permissions/users', [RoleController::class, 'userPermissions'])->name('permissions-users');
-        Route::post('/permissions/users/update', [RoleController::class, 'updateUserPermissions'])->name('permissions-users-update');
-
-
     });
 
     // Module Gestion du Stock

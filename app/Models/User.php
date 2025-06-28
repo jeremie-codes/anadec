@@ -61,20 +61,32 @@ class User extends Authenticatable
         return $this->photo && file_exists(public_path('storage/' . $this->photo));
     }
 
-    // Méthodes de permissions
+    // Méthodes de permissions basées sur le rôle de l'agent
     public function hasPermission($permission)
     {
-        return $this->agent->role && $this->agent->role->hasPermission($permission);
+        if (!$this->agent || !$this->agent->role) {
+            return false;
+        }
+
+        return $this->agent->role->hasPermission($permission);
     }
 
     public function hasRole($roleName)
     {
-        return $this->agent->role && $this->agent->role->name === $roleName;
+        if (!$this->agent || !$this->agent->role) {
+            return false;
+        }
+
+        return $this->agent->role->name === $roleName;
     }
 
     public function hasAnyRole(array $roles)
     {
-        return $this->agent->role && in_array($this->agent->role->name, $roles);
+        if (!$this->agent || !$this->agent->role) {
+            return false;
+        }
+
+        return in_array($this->agent->role->name, $roles);
     }
 
     // Vérifier si l'utilisateur peut accéder à une ressource
@@ -84,21 +96,33 @@ class User extends Authenticatable
         return $this->hasPermission($permission);
     }
 
-    // Vérifier si l'utilisateur est un administrateur
-    public function isAdmin()
-    {
-        return $this->hasRole('drh');
-    }
-
     // Vérifier si l'utilisateur est un directeur
     public function isDirecteur()
     {
-        return $this->hasAnyRole(['directeur', 'sous_directeur', 'drh']);
+        return $this->hasAnyRole(['directeur', 'sous-directeur']);
     }
 
-    // Vérifier si l'utilisateur est du personnel RH
-    public function isRH()
+    // Vérifier si l'utilisateur est un chef
+    public function isChef()
     {
-        return $this->hasAnyRole(['rh', 'drh']);
+        return $this->hasAnyRole(['directeur', 'sous-directeur', 'chef-service', 'chef-s-principal']);
+    }
+
+    // Obtenir le rôle de l'utilisateur
+    public function getRole()
+    {
+        return $this->agent?->role;
+    }
+
+    // Obtenir le nom du rôle
+    public function getRoleName()
+    {
+        return $this->agent?->role?->name;
+    }
+
+    // Obtenir le nom d'affichage du rôle
+    public function getRoleDisplayName()
+    {
+        return $this->agent?->role?->display_name ?? 'Aucun rôle';
     }
 }
