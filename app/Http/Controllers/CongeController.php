@@ -254,6 +254,11 @@ class CongeController extends Controller
 
         $conge->update($validated);
 
+        if (Auth::user()->role->name == 'rh' || Auth::user()->role->name == 'drh') {
+            $conge->statut = 'traiter_rh';
+            $conge->save();
+        }
+
         return redirect()->route('conges.show', $conge)
             ->with('success', 'Demande de congé modifiée avec succès.');
     }
@@ -331,7 +336,7 @@ class CongeController extends Controller
     // Interface de validation DRH
     public function validationDrh(Request $request)
     {
-        $query = Conge::with('agent')->approuveDirecteur();
+        $query = Conge::with('agent')->traiterRh();
 
         if ($request->filled('search')) {
             $search = $request->search;

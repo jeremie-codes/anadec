@@ -174,6 +174,11 @@ class AgentController extends Controller
 
         $agent->update($validated);
 
+               // Créer le compte utilisateur si demandé
+        if ($request->boolean('create_user_account')) {
+            $this->createUserAccount($agent, $validated);
+        }
+
         return redirect()->route('agents.index')
             ->with('success', 'Agent modifié avec succès.');
     }

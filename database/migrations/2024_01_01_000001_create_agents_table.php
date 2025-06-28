@@ -13,14 +13,13 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('matricule')->unique();
             $table->string('nom');
-            $table->string('prenoms');
+            $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('set null');
             $table->date('date_naissance');
             $table->string('lieu_naissance');
             $table->enum('sexe', ['M', 'F']);
             $table->string('situation_matrimoniale');
             $table->string('direction');
             $table->string('service');
-            $table->string('poste');
             $table->date('date_recrutement');
             $table->string('telephone')->nullable();
             $table->string('email')->nullable();

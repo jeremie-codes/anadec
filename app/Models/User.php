@@ -16,7 +16,6 @@ class User extends Authenticatable
         'email',
         'photo',
         'password',
-        'role_id',
     ];
 
     protected $hidden = [
@@ -33,11 +32,6 @@ class User extends Authenticatable
     public function agent()
     {
         return $this->hasOne(Agent::class);
-    }
-
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
     }
 
     // Méthodes utilitaires pour la photo
@@ -70,17 +64,17 @@ class User extends Authenticatable
     // Méthodes de permissions
     public function hasPermission($permission)
     {
-        return $this->role && $this->role->hasPermission($permission);
+        return $this->agent->role && $this->agent->role->hasPermission($permission);
     }
 
     public function hasRole($roleName)
     {
-        return $this->role && $this->role->name === $roleName;
+        return $this->agent->role && $this->agent->role->name === $roleName;
     }
 
     public function hasAnyRole(array $roles)
     {
-        return $this->role && in_array($this->role->name, $roles);
+        return $this->agent->role && in_array($this->agent->role->name, $roles);
     }
 
     // Vérifier si l'utilisateur peut accéder à une ressource

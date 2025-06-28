@@ -145,6 +145,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/permissions/matrix', [RoleController::class, 'permissions'])->name('permissions');
         Route::post('/permissions/update', [RoleController::class, 'updatePermissions'])->name('update-permissions');
 
+        // Permissions par utilisateur
+        Route::get('/permissions/users', [RoleController::class, 'userPermissions'])->name('permissions-users');
+        Route::post('/permissions/users/update', [RoleController::class, 'updateUserPermissions'])->name('permissions-users-update');
+
+
     });
 
     // Module Gestion du Stock

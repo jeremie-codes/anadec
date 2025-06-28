@@ -68,16 +68,14 @@ class RoleController extends Controller
     {
         $query = User::with('role');
 
-        // Recherche par nom ou email
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
-        // Filtrage par rôle
         if ($request->filled('role')) {
             if ($request->role === 'no_role') {
                 $query->whereNull('role_id');
@@ -108,7 +106,6 @@ class RoleController extends Controller
         $availablePermissions = Role::getAvailablePermissions();
         $roles = Role::where('is_active', true)->get();
 
-        // Créer une matrice permissions/rôles
         $permissionMatrix = [];
         foreach ($availablePermissions as $permission => $description) {
             $permissionMatrix[$permission] = [
@@ -121,7 +118,6 @@ class RoleController extends Controller
             }
         }
 
-        // Grouper par catégorie
         $groupedMatrix = [];
         foreach ($permissionMatrix as $permission => $data) {
             $category = explode('.', $permission)[0];
@@ -149,5 +145,59 @@ class RoleController extends Controller
         }
 
         return back()->with('success', 'Permissions mises à jour avec succès.');
+    }
+
+    // ========================== NOUVELLES MÉTHODES =============================
+
+    public function userPermissions()
+    {
+        $availablePermissions = Role::getAvailablePermissions();
+        $roles = Role::all();
+        $users = User::with(['agent.role'])->get();
+
+        $permissionMatrix = [];
+        foreach ($availablePermissions as $permission => $description) {
+            $permissionMatrix[$permission] = [
+                'description' => $description,
+                'users' => []
+            ];
+
+            foreach ($users as $user) {
+                $permissionMatrix[$permission]['users'][$user->id] = $user->hasPermission($permission);
+            }
+        }
+
+        $groupedMatrix = [];
+        foreach ($users as $user) {
+            foreach ($permissionMatrix as $permission => $data) {
+                $groupedMatrix[$user->id]['name'] = $user->name;
+                $groupedMatrix[$user->id]['permissions'][$permission] = [
+                    'description' => $data['description'],
+                    'checked' => $data['users'][$user->id]
+                ];
+            }
+        }
+
+        return view('roles.permissions', compact('users', 'groupedMatrix', 'availablePermissions', 'roles'));
+    }
+
+    public function updateUserPermissions(Request $request)
+    {
+        $validated = $request->validate([
+            'permissions' => 'array',
+            'permissions.*' => 'array',
+            'permissions.*.*' => 'boolean',
+        ]);
+
+        $users = User::all()->keyBy('id');
+
+        foreach ($validated['permissions'] as $userId => $permissions) {
+            if (isset($users[$userId])) {
+                $grantedPermissions = array_keys(array_filter($permissions));
+                $users[$userId]->syncPermissions($grantedPermissions);
+            }
+        }
+
+        return back()->with('success', 'Permissions utilisateurs mises à jour avec succès.');
     }
 }

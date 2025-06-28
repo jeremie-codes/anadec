@@ -61,54 +61,176 @@ class Role extends Model
     public static function getAvailablePermissions()
     {
         return [
-            // Gestion des agents
-            'agents.view' => 'Voir les agents',
-            'agents.create' => 'Créer des agents',
-            'agents.edit' => 'Modifier les agents',
-            'agents.delete' => 'Supprimer les agents',
-            'agents.export' => 'Exporter les agents',
-
-            // Gestion des présences
-            'presences.view' => 'Voir les présences',
-            'presences.create' => 'Créer des présences',
-            'presences.edit' => 'Modifier les présences',
-            'presences.delete' => 'Supprimer les présences',
-            'presences.export' => 'Exporter les présences',
-
-            // Gestion des congés
-            'conges.view' => 'Voir les congés',
-            'conges.create' => 'Créer des demandes de congé',
-            'conges.edit' => 'Modifier les demandes de congé',
-            'conges.delete' => 'Supprimer les demandes de congé',
-            'conges.approve_directeur' => 'Approuver en tant que directeur',
-            'conges.validate_drh' => 'Valider en tant que DRH',
-            'conges.view_all' => 'Voir tous les congés',
-            'conges.view_own' => 'Voir ses propres congés',
-
-            // Cotation des agents
-            'cotations.view' => 'Voir les cotations',
-            'cotations.create' => 'Créer des cotations',
-            'cotations.edit' => 'Modifier les cotations',
-            'cotations.delete' => 'Supprimer les cotations',
-            'cotations.generate' => 'Générer des cotations automatiques',
-
-            // Gestion des utilisateurs et rôles
-            'users.view' => 'Voir les utilisateurs',
-            'users.create' => 'Créer des utilisateurs',
-            'users.edit' => 'Modifier les utilisateurs',
-            'users.delete' => 'Supprimer les utilisateurs',
-            'roles.view' => 'Voir les rôles',
-            'roles.edit' => 'Modifier les rôles et permissions',
-
-            // Rapports et statistiques
-            'reports.view' => 'Voir les rapports',
-            'reports.export' => 'Exporter les rapports',
+            // Dashboard
             'dashboard.view' => 'Accéder au tableau de bord',
 
-            // Administration système
-            'system.settings' => 'Paramètres système',
-            'system.backup' => 'Sauvegarde système',
-            'system.logs' => 'Voir les logs système',
+            // Profil utilisateur
+            'profile.view' => 'Voir son profil',
+            'profile.edit' => 'Modifier son profil',
+            'profile.update' => 'Mettre à jour son profil',
+            'profile.delete-photo' => 'Supprimer la photo de profil',
+
+            // Agents
+            'agents.view' => 'Voir les agents',
+            'agents.create' => 'Créer un agent',
+            'agents.edit' => 'Modifier un agent',
+            'agents.delete' => 'Supprimer un agent',
+            'agents.export' => 'Exporter les agents',
+            'agents.identification' => 'Liste d\'identification',
+            'agents.retraites' => 'Liste des retraités',
+            'agents.malades' => 'Liste des malades',
+            'agents.demissions' => 'Liste des démissions',
+            'agents.revocations' => 'Liste des révocations',
+            'agents.disponibilites' => 'Liste des disponibilités',
+            'agents.detachements' => 'Liste des détachements',
+            'agents.mutations' => 'Liste des mutations',
+            'agents.reintegrations' => 'Liste des réintégrations',
+            'agents.missions' => 'Liste des missions',
+            'agents.deces' => 'Liste des décès',
+
+            // Présences
+            'presences.view' => 'Voir les présences',
+            'presences.daily' => 'Voir la présence quotidienne',
+            'presences.create' => 'Créer une présence',
+            'presences.edit' => 'Modifier une présence',
+            'presences.delete' => 'Supprimer une présence',
+            'presences.export' => 'Exporter les présences',
+            'presences.filter' => 'Filtrer les présences',
+
+            // Congés
+            'conges.view' => 'Voir les congés',
+            'conges.dashboard' => 'Dashboard congés',
+            'conges.create' => 'Créer un congé',
+            'conges.edit' => 'Modifier un congé',
+            'conges.delete' => 'Supprimer un congé',
+            'conges.show' => 'Détails d\'un congé',
+            'conges.approval.directeur' => 'Approuver en tant que directeur',
+            'conges.validation.drh' => 'Valider en tant que DRH',
+            'conges.mes-conges' => 'Voir mes congés',
+            'conges.solde' => 'Calculer le solde des congés',
+
+            // Cotations
+            'cotations.view' => 'Voir les cotations',
+            'cotations.dashboard' => 'Dashboard cotations',
+            'cotations.create' => 'Créer une cotation',
+            'cotations.edit' => 'Modifier une cotation',
+            'cotations.delete' => 'Supprimer une cotation',
+            'cotations.show' => 'Détails d\'une cotation',
+            'cotations.generate' => 'Générer automatiquement',
+
+            // Rôles et Permissions
+            'roles.view' => 'Voir les rôles',
+            'roles.edit' => 'Modifier les rôles',
+            'roles.users' => 'Voir les utilisateurs par rôle',
+            'roles.permissions.matrix' => 'Voir la matrice des permissions',
+            'roles.permissions.update' => 'Mettre à jour les permissions',
+
+            // Utilisateurs
+            'users.view' => 'Voir les utilisateurs',
+            'users.create' => 'Créer un utilisateur',
+            'users.edit' => 'Modifier un utilisateur',
+            'users.delete' => 'Supprimer un utilisateur',
+            'users.update-role' => 'Changer le rôle d\'un utilisateur',
+
+            // Stock
+            'stocks.view' => 'Voir les stocks',
+            'stocks.dashboard' => 'Dashboard stock',
+            'stocks.create' => 'Créer un stock',
+            'stocks.edit' => 'Modifier un stock',
+            'stocks.delete' => 'Supprimer un stock',
+            'stocks.show' => 'Détails du stock',
+            'stocks.ajouter' => 'Ajouter au stock',
+            'stocks.retirer' => 'Retirer du stock',
+            'stocks.mouvements' => 'Voir les mouvements de stock',
+
+            // Demandes de fournitures
+            'demandes-fournitures.view' => 'Voir les demandes de fournitures',
+            'demandes-fournitures.dashboard' => 'Dashboard fournitures',
+            'demandes-fournitures.create' => 'Créer une demande',
+            'demandes-fournitures.edit' => 'Modifier une demande',
+            'demandes-fournitures.delete' => 'Supprimer une demande',
+            'demandes-fournitures.show' => 'Détails d\'une demande',
+            'demandes-fournitures.approver' => 'Approuver une demande',
+            'demandes-fournitures.livrer' => 'Livrer une demande',
+            'demandes-fournitures.mes-demandes' => 'Mes demandes',
+
+            // Véhicules
+            'vehicules.view' => 'Voir les véhicules',
+            'vehicules.dashboard' => 'Dashboard véhicules',
+            'vehicules.create' => 'Créer un véhicule',
+            'vehicules.edit' => 'Modifier un véhicule',
+            'vehicules.delete' => 'Supprimer un véhicule',
+            'vehicules.show' => 'Détails d\'un véhicule',
+            'vehicules.maintenance' => 'Voir/ajouter une maintenance',
+            'vehicules.statut' => 'Changer statut du véhicule',
+
+            // Chauffeurs
+            'chauffeurs.view' => 'Voir les chauffeurs',
+            'chauffeurs.create' => 'Créer un chauffeur',
+            'chauffeurs.edit' => 'Modifier un chauffeur',
+            'chauffeurs.delete' => 'Supprimer un chauffeur',
+            'chauffeurs.show' => 'Détails d\'un chauffeur',
+            'chauffeurs.disponibles' => 'Voir les chauffeurs disponibles',
+
+            // Demandes de véhicules
+            'demandes-vehicules.view' => 'Voir les demandes de véhicules',
+            'demandes-vehicules.dashboard' => 'Dashboard demandes véhicules',
+            'demandes-vehicules.create' => 'Créer une demande véhicule',
+            'demandes-vehicules.edit' => 'Modifier une demande véhicule',
+            'demandes-vehicules.delete' => 'Supprimer une demande véhicule',
+            'demandes-vehicules.show' => 'Détails d\'une demande véhicule',
+            'demandes-vehicules.approver' => 'Approuver une demande véhicule',
+            'demandes-vehicules.affecter' => 'Affecter un véhicule',
+            'demandes-vehicules.demarrer' => 'Démarrer une mission',
+            'demandes-vehicules.terminer' => 'Terminer une mission',
+            'demandes-vehicules.mes-demandes' => 'Mes demandes véhicules',
+
+            // Paiements
+            'paiements.view' => 'Voir les paiements',
+            'paiements.dashboard' => 'Dashboard paiements',
+            'paiements.create' => 'Créer un paiement',
+            'paiements.edit' => 'Modifier un paiement',
+            'paiements.delete' => 'Supprimer un paiement',
+            'paiements.show' => 'Détails d\'un paiement',
+            'paiements.valider' => 'Valider un paiement',
+            'paiements.payer' => 'Effectuer un paiement',
+            'paiements.fiches-paie' => 'Voir les fiches de paie',
+            'paiements.fiche-paie' => 'Détail fiche de paie',
+            'paiements.mes-paiements' => 'Mes paiements',
+            'paiements.calcul' => 'Calculer salaire ou décompte',
+
+            // Courriers
+            'courriers.view' => 'Voir les courriers',
+            'courriers.dashboard' => 'Dashboard courriers',
+            'courriers.create' => 'Créer un courrier',
+            'courriers.edit' => 'Modifier un courrier',
+            'courriers.delete' => 'Supprimer un courrier',
+            'courriers.show' => 'Détails courrier',
+            'courriers.traiter' => 'Traiter un courrier',
+            'courriers.archiver' => 'Archiver un courrier',
+            'courriers.documents' => 'Gérer les documents du courrier',
+            'courriers.entrants' => 'Voir courriers entrants',
+            'courriers.sortants' => 'Voir courriers sortants',
+            'courriers.internes' => 'Voir courriers internes',
+            'courriers.non-traites' => 'Voir courriers non traités',
+            'courriers.archives' => 'Voir archives de courriers',
+
+            // Visiteurs
+            'visitors.view' => 'Voir les visiteurs',
+            'visitors.create' => 'Ajouter un visiteur',
+            'visitors.edit' => 'Modifier un visiteur',
+            'visitors.delete' => 'Supprimer un visiteur',
+            'visitors.show' => 'Détails d\'un visiteur',
+            'visitors.marquer-sortie' => 'Marquer la sortie',
+
+            // Valves
+            'valves.view' => 'Voir les valves',
+            'valves.dashboard' => 'Dashboard valves',
+            'valves.create' => 'Créer un communiqué',
+            'valves.edit' => 'Modifier un communiqué',
+            'valves.delete' => 'Supprimer un communiqué',
+            'valves.show' => 'Détails du communiqué',
+            'valves.toggle-actif' => 'Activer/Désactiver un communiqué',
         ];
     }
 

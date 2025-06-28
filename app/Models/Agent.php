@@ -21,7 +21,7 @@ class Agent extends Model
         'situation_matrimoniale',
         'direction',
         'service',
-        'poste',
+        'role_id',
         'date_recrutement',
         'telephone',
         'email',
@@ -60,6 +60,11 @@ class Agent extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 
      public function chauffeur()
